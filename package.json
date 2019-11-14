@@ -1,0 +1,44 @@
+{
+  "author": "jitsi.org",
+  "bugs": {
+    "email": "support@jitsi.org",
+    "url": "https://github.com/jitsi/spot-electron-sdk/issues"
+  },
+  "description": "Electron SDK to provide Spot controller functionality to desktop apps.",
+  "dependencies": {
+    "@abandonware/noble": "1.9.2-5",
+    "jitsi-meet-logger": "github:jitsi/jitsi-meet-logger#5da3033d647054457597920252b3387fa43a17fa",
+    "lodash": "4.17.15"
+  },
+  "devDependencies": {
+    "@types/lodash": "4.14.138",
+    "@types/node": "^12.7.5",
+    "@typescript-eslint/eslint-plugin": "2.6.0",
+    "@typescript-eslint/parser": "2.6.0",
+    "eslint": "6.6.0",
+    "eslint-config-jitsi": "github:jitsi/eslint-config-jitsi#1.0.2",
+    "eslint-plugin-import": "2.18.2",
+    "husky": "3.0.9",
+    "typescript": "3.6.4"
+  },
+  "homepage": "https://github.com/spot-electron-sdk",
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  },
+  "license": "Apache-2.0",
+  "main": "./lib/index",
+  "name": "@jitsi/spot-electron-sdk",
+  "peerDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:jitsi/spot-electron-sdk.git"
+  },
+  "scripts": {
+    "build": "rm -rf lib/* && tsc",
+    "lint": "eslint --ext .ts,.tsx ./src",
+    "prepare": "npm run build"
+  },
+  "version": "0.0.1"
+}
