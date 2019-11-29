@@ -1,7 +1,3 @@
-import Peripherial from './Peripherial';
-
-const BEACON_DEVICE_ID = '4c000215';
-
 export const PROXIMITY = {
     IMMEDIATE: 'immediate',
     NEAR: 'near',
@@ -64,40 +60,26 @@ export default class Beacon {
     /**
      * Static factory function to parse a raw device into a Spot Beacon, or return null if it's not a compatible device.
      *
-     * @param peripherial - The detected raw peripherial.
+     * @param dataString - The raw hex data of the detected device.
      */
-    public static parse(peripherial: Peripherial): Beacon | null {
-        const { manufacturerData } = peripherial.advertisement;
-
-        if (!manufacturerData) {
-            // This is not a beacon
-            return null;
-        }
-
-        const dataString = manufacturerData.toString('hex').toLowerCase();
-
-        if (!dataString.startsWith(BEACON_DEVICE_ID)) {
-            // This is not a beacon
-            return null;
-        }
-
+    public static parse(dataString: string, rssi: number): Beacon | null {
         // data structure:
         // < 8 bytes  manufacturer string >
         // < 32 bytes UUID >
         // < 4 bytes major version >
         // < 4 bytes minor version >
         // < 2 bytes transmit power >
-        const uuid = `${dataString.substr(8, 8)}-${dataString.substr(16, 4)}-${
-            dataString.substr(20, 4)}-${dataString.substr(24, 4)}-${dataString.substr(28, 12)}`;
-        const major = dataString.substr(40, 4);
-        const minor = dataString.substr(44, 4);
+        const uuid = `${dataString.substr(0, 8)}-${dataString.substr(8, 4)}-${
+            dataString.substr(12, 4)}-${dataString.substr(16, 4)}-${dataString.substr(20, 12)}`;
+        const major = dataString.substr(32, 4);
+        const minor = dataString.substr(36, 4);
 
         // Join code is stored with base 36 to base 16 transformation, so needs to be reverse-transformed
         const joinCode = parseInt(`${major}${minor}`, 16).toString(36);
-        const power = parseInt(dataString.substr(48, 2), 16) - 256;
+        const power = parseInt(dataString.substr(40, 2), 16) - 256;
 
         // Based on https://www.rn.inf.tu-dresden.de/dargie/papers/icwcuca.pdf
-        const distance = Math.pow(10, (power - peripherial.rssi) / (10 * 2));
+        const distance = Math.pow(10, (power - rssi) / (10 * 2));
 
         let proximity: string;
 

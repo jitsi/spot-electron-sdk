@@ -1,14 +1,13 @@
-import noble from '@abandonware/noble';
 import EventEmitter from 'events';
 import _ from 'lodash';
 
 import logger from './logger';
-import { Beacon, Config, Peripherial } from './model';
+import { Beacon, Config } from './model';
 
 /**
- * Base emitter class to emit high level detections for consumer apps.
+ * Abstract emitter class to emit high level detections for consumer apps.
  */
-export default class BeaconDetector extends EventEmitter {
+export default class AbstractBeaconDetector extends EventEmitter {
     /**
      * A map of all recently detected beacons mapped by join code.
      */
@@ -53,22 +52,18 @@ export default class BeaconDetector extends EventEmitter {
         // Binding this
         this.onDiscover = this.onDiscover.bind(this);
         this.onScanStart = this.onScanStart.bind(this);
+        this.onScanStartError = this.onScanStartError.bind(this);
         this.onScanStop = this.onScanStop.bind(this);
         this.reportBeacons = this.reportBeacons.bind(this);
-
-        // Setting event listeners
-        noble.on('discover', this.onDiscover);
-        noble.on('scanStart', this.onScanStart);
-        noble.on('scanStop', this.onScanStop);
     }
 
     /**
      * Internal callback to handle discovered devices.
      *
-     * @param device - The discovered device.
+     * @param manufacturerData - The hex format manufacturer data of the beacon.
      */
-    private onDiscover(device: Peripherial): void {
-        const beacon = Beacon.parse(device);
+    protected onDiscover(manufacturerData: string, rssi: number): void {
+        const beacon = Beacon.parse(manufacturerData, rssi);
 
         if (beacon && beacon.uuid === this.config.beaconUUID) {
             this.beacons.set(beacon.joinCode, beacon);
@@ -78,16 +73,25 @@ export default class BeaconDetector extends EventEmitter {
     /**
      * Internal callback to handle the start of the scanning.
      */
-    private onScanStart(): void {
+    protected onScanStart(): void {
         this.reporterTimer = setInterval(this.reportBeacons, this.config.reportIntervalMillisecs);
         this.emit('scanStart');
         logger.info('Spot BLE scanning started.');
     }
 
     /**
+     * Internal callback to handle the error of starting the scanning.
+     *
+     * @param error The error thrown, if any.
+     */
+    protected onScanStartError(error?: Error): void {
+        this.emit('scanStartError', error);
+    }
+
+    /**
      * Internal callback to handle the stop of the scanning.
      */
-    private onScanStop(): void {
+    protected onScanStop(): void {
         clearInterval(this.reporterTimer);
         this.emit('scanStop');
         logger.info('Spot BLE scanning stopped.');
@@ -163,28 +167,5 @@ export default class BeaconDetector extends EventEmitter {
         }
 
         return false;
-    }
-
-    /**
-     * Function to start the device detection.
-     */
-    public start(): void {
-        noble.on('stateChange', (state: string) => {
-            if (state === 'poweredOn') {
-                noble.startScanning([], true, (error: Error) => {
-                    if (error) {
-                        this.emit('scanStartError', error);
-                        logger.error('Error starting beacon scanner.', error);
-                    }
-                });
-            }
-        });
-    }
-
-    /**
-     * Functio to stop the device detection.
-     */
-    public stop(): void {
-        noble.stopScanning();
     }
 }

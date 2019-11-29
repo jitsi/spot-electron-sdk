@@ -8,7 +8,9 @@
   "dependencies": {
     "@abandonware/noble": "1.9.2-5",
     "jitsi-meet-logger": "github:jitsi/jitsi-meet-logger#5da3033d647054457597920252b3387fa43a17fa",
-    "lodash": "4.17.15"
+    "lodash": "4.17.15",
+    "@jitsi/windows.devices.bluetooth.advertisement": "0.1.0",
+    "@jitsi/windows.storage.streams": "0.1.0"
   },
   "devDependencies": {
     "@types/lodash": "4.14.138",
@@ -36,9 +38,9 @@
     "url": "git@github.com:jitsi/spot-electron-sdk.git"
   },
   "scripts": {
-    "build": "rm -rf lib/* && tsc",
+    "build": "tsc",
     "lint": "eslint --ext .ts,.tsx ./src",
     "prepare": "npm run build"
   },
-  "version": "0.0.1"
+  "version": "0.1.0"
 }
