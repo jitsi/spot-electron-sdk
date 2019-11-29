@@ -1,17 +1,20 @@
 # Spot Electron SDK
 
-This SDK provides spot beacon functionality for desktop (electron) apps.
+This SDK provides spot functionalities for desktop (electron) apps. Currently it only supports detecting Spot beacons.
 
 # Usage
 
 1. Instantiate the SDK with (optional) configuration object.
 
 ```javascript
-const { BeaconDetector } =  require('spot-electron-sdk');
-const detector = new BeaconDetector({
-    beaconUUID: string,
-    beaconDismissTimeoutSeconds: number,
-    reportIntervalMillisecs: number
+const { beaconDetectorResolver } =  require('spot-electron-sdk');
+
+beaconDetectorResolver.then(({ default: BeaconDetector }) => {
+    const detector = new BeaconDetector({
+        beaconUUID: string,
+        beaconDismissTimeoutSeconds: number,
+        reportIntervalMillisecs: number
+    });
 });
 ```
 2. Subscribe to events
