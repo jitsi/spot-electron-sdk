@@ -51,6 +51,25 @@ export default class Beacon {
     }
 
     /**
+     * Returns a distance rounded to .1 metres.
+     */
+    public getRoundedDistance() {
+        return Math.round(this.distance * 10) / 10;
+    }
+
+    /**
+     * Returns true if the two beacons are equal using a lenient comparison.
+     *
+     * @param b - The other Beacon object.
+     */
+    public isEqual(b: Beacon): boolean {
+        return b &&
+            b.uuid === this.uuid &&
+            b.joinCode === this.joinCode &&
+            b.getRoundedDistance() === this.getRoundedDistance()
+    }
+
+    /**
      * Returns a string representation of the device. Used for debugging and logging purposes.
      */
     public toString(): string {

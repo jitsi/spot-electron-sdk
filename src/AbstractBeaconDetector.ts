@@ -123,24 +123,24 @@ export default class AbstractBeaconDetector extends EventEmitter {
 
             // Please note: lastReportedBeacons is always sorted
             this.lastReportedBeacons = sortedBeaconsArray;
-        }
 
-        // We also need to report the current best detection
-        if (sortedBeaconsArray.length) {
-            const bestBeacon = _.nth(_.sortBy(sortedBeaconsArray, [ 'distance' ]), -1);
+            // We also need to report the current best detection
+            if (sortedBeaconsArray.length) {
+                const bestBeacon = _.nth(_.sortBy(sortedBeaconsArray, [ 'distance' ]), -1);
 
-            if (bestBeacon && (!this.lastReportedBestBeacon
-            || bestBeacon.joinCode !== this.lastReportedBestBeacon.joinCode
-            || bestBeacon.proximity !== this.lastReportedBestBeacon.proximity)) {
-                this.emit('bestBeacon', bestBeacon);
-                logger.info('Best beacon updated.', bestBeacon);
-                this.lastReportedBestBeacon = bestBeacon;
+                if (bestBeacon && (!this.lastReportedBestBeacon
+                || bestBeacon.joinCode !== this.lastReportedBestBeacon.joinCode
+                || bestBeacon.proximity !== this.lastReportedBestBeacon.proximity)) {
+                    this.emit('bestBeacon', bestBeacon);
+                    logger.info('Best beacon updated.', bestBeacon);
+                    this.lastReportedBestBeacon = bestBeacon;
+                }
+            } else {
+                // There is no best beacon
+                this.emit('bestBeacon', undefined);
+                logger.info('There is no current best beacon.');
+                this.lastReportedBestBeacon = undefined;
             }
-        } else {
-            // There is no best beacon
-            this.emit('bestBeacon', undefined);
-            logger.info('There is no current best beacon.');
-            this.lastReportedBestBeacon = undefined;
         }
     }
 
@@ -160,7 +160,7 @@ export default class AbstractBeaconDetector extends EventEmitter {
             const b1 = newList[i];
             const b2 = this.lastReportedBeacons[i];
 
-            if (b1.uuid !== b2.uuid || b1.joinCode !== b2.joinCode) {
+            if (!b1.isEqual(b2)) {
                 // There is at least one different device.
                 return true;
             }
