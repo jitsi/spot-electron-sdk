@@ -19,7 +19,6 @@ beaconDetectorResolver.then(({ default: BeaconDetector }) => {
      */
     detector.on('scanStop', () => {
         console.log('Beacon scanning stopped.');
-        process.exit(0);
     });
 
 
@@ -37,10 +36,10 @@ beaconDetectorResolver.then(({ default: BeaconDetector }) => {
         console.log('Best beacon', beacon);
     });
 
-
     detector.start();
 
     setTimeout(() => {
         detector.stop();
-    }, 10000);
+        process.exit(0);
+    }, STEP_TIMEOUT_MS);
 });

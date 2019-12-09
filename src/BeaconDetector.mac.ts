@@ -7,6 +7,9 @@ import { Config, Peripherial } from './model';
 // Mac specific beacon device ID.
 const BEACON_DEVICE_ID = '4c000215';
 
+// Noble state required to start scanning.
+const START_REQUIRED_STATE = 'poweredOn';
+
 /**
  * Base emitter class to emit high level detections for consumer apps.
  */
@@ -54,15 +57,13 @@ export default class BeaconDetector extends AbstractBeaconDetector {
      * Function to start the device detection.
      */
     public start(): void {
-        noble.on('stateChange', (state: string) => {
-            if (state === 'poweredOn') {
-                noble.startScanning([], true, (error: Error) => {
-                    if (error) {
-                        this.onScanStartError(error);
-                        logger.error('Error starting beacon scanner.', error);
-                    }
-                });
-            }
+        this.waitForPoweredOn().then(() => {
+            noble.startScanning([], true, (error: Error) => {
+                if (error) {
+                    this.onScanStartError(error);
+                    logger.error('Error starting beacon scanner.', error);
+                }
+            });
         });
     }
 
@@ -71,5 +72,22 @@ export default class BeaconDetector extends AbstractBeaconDetector {
      */
     public stop(): void {
         noble.stopScanning();
+    }
+
+    /**
+     * Ensures that the bluetooth hardware is in powered on state.
+     */
+    private waitForPoweredOn(): Promise<void> {
+        if (noble.state === START_REQUIRED_STATE) {
+            return Promise.resolve();
+        } else {
+            return new Promise((resolve) => {
+                noble.on('stateChange', (state: string) => {
+                    if (state === START_REQUIRED_STATE) {
+                        resolve();
+                    }
+                });
+            });
+        }
     }
 }
