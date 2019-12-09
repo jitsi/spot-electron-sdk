@@ -7,7 +7,7 @@ import { Beacon, Config } from './model';
 /**
  * Abstract emitter class to emit high level detections for consumer apps.
  */
-export default class AbstractBeaconDetector extends EventEmitter {
+export default abstract class AbstractBeaconDetector extends EventEmitter {
     /**
      * A map of all recently detected beacons mapped by join code.
      */
@@ -75,8 +75,8 @@ export default class AbstractBeaconDetector extends EventEmitter {
      */
     protected onScanStart(): void {
         this.reporterTimer = setInterval(this.reportBeacons, this.config.reportIntervalMillisecs);
-        this.emit('scanStart');
         logger.info('Spot BLE scanning started.');
+        this.emit('scanStart');
     }
 
     /**
@@ -93,8 +93,10 @@ export default class AbstractBeaconDetector extends EventEmitter {
      */
     protected onScanStop(): void {
         clearInterval(this.reporterTimer);
-        this.emit('scanStop');
+        this.beacons.clear();
+        this.lastReportedBeacons = [];
         logger.info('Spot BLE scanning stopped.');
+        this.emit('scanStop');
     }
 
     /**
@@ -137,8 +139,8 @@ export default class AbstractBeaconDetector extends EventEmitter {
                 }
             } else {
                 // There is no best beacon
-                this.emit('bestBeacon', undefined);
                 logger.info('There is no current best beacon.');
+                this.emit('bestBeacon', undefined);
                 this.lastReportedBestBeacon = undefined;
             }
         }
@@ -168,4 +170,14 @@ export default class AbstractBeaconDetector extends EventEmitter {
 
         return false;
     }
+
+    /**
+     * Function to start the device detection.
+     */
+    public abstract start(): void;
+
+    /**
+     * Functio to stop the device detection.
+     */
+    public abstract stop(): void;
 }
