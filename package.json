@@ -9,8 +9,8 @@
     "@abandonware/noble": "1.9.2-5",
     "jitsi-meet-logger": "github:jitsi/jitsi-meet-logger#5da3033d647054457597920252b3387fa43a17fa",
     "lodash": "4.17.15",
-    "@jitsi/windows.devices.bluetooth.advertisement": "0.1.0",
-    "@jitsi/windows.storage.streams": "0.1.0"
+    "@jitsi/windows.devices.bluetooth.advertisement": "0.1.2",
+    "@jitsi/windows.storage.streams": "0.1.2"
   },
   "devDependencies": {
     "@types/lodash": "4.14.138",
@@ -42,5 +42,5 @@
     "lint": "eslint --ext .ts,.tsx ./src",
     "prepare": "npm run build"
   },
-  "version": "0.1.0"
+  "version": "0.1.1"
 }
