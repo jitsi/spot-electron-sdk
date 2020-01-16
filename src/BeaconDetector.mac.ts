@@ -80,14 +80,15 @@ export default class BeaconDetector extends AbstractBeaconDetector {
     private waitForPoweredOn(): Promise<void> {
         if (noble.state === START_REQUIRED_STATE) {
             return Promise.resolve();
-        } else {
-            return new Promise((resolve) => {
-                noble.on('stateChange', (state: string) => {
-                    if (state === START_REQUIRED_STATE) {
-                        resolve();
-                    }
-                });
-            });
         }
+
+        return new Promise(resolve => {
+            noble.on('stateChange', (state: string) => {
+                if (state === START_REQUIRED_STATE) {
+                    resolve();
+                }
+            });
+        });
+
     }
 }
