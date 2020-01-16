@@ -53,7 +53,7 @@ export default class Beacon {
     /**
      * Returns a distance rounded to .1 metres.
      */
-    public getRoundedDistance() {
+    public getRoundedDistance(): number {
         return Math.round(this.distance * 10) / 10;
     }
 
@@ -63,10 +63,10 @@ export default class Beacon {
      * @param b - The other Beacon object.
      */
     public isEqual(b: Beacon): boolean {
-        return b &&
-            b.uuid === this.uuid &&
-            b.joinCode === this.joinCode &&
-            b.getRoundedDistance() === this.getRoundedDistance()
+        return b
+            && b.uuid === this.uuid
+            && b.joinCode === this.joinCode
+            && b.getRoundedDistance() === this.getRoundedDistance()
     }
 
     /**
