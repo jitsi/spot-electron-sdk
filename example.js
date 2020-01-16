@@ -41,5 +41,5 @@ beaconDetectorResolver.then(({ default: BeaconDetector }) => {
     setTimeout(() => {
         detector.stop();
         process.exit(0);
-    }, STEP_TIMEOUT_MS);
+    }, 5000);
 });
