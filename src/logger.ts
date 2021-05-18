@@ -1,4 +1,4 @@
-import logger from 'jitsi-meet-logger';
+import logger from '@jitsi/jitsi-meet-logger';
 
 /**
  * An instantiated and configured {@code jitsi-meet-logger} instance.

@@ -7,7 +7,7 @@
   "description": "Electron SDK to provide Spot controller functionality to desktop apps.",
   "dependencies": {
     "@abandonware/noble": "1.9.2-5",
-    "jitsi-meet-logger": "github:jitsi/jitsi-meet-logger#5da3033d647054457597920252b3387fa43a17fa",
+    "@jitsi/jitsi-meet-logger": "github:jitsi/jitsi-meet-logger#5da3033d647054457597920252b3387fa43a17fa",
     "lodash": "4.17.15"
   },
   "devDependencies": {
@@ -45,5 +45,5 @@
     "lint": "eslint --ext .ts,.tsx ./src",
     "prepare": "npm run build"
   },
-  "version": "0.2.0"
+  "version": "0.2.1"
 }
