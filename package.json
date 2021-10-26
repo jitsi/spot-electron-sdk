@@ -36,6 +36,14 @@
     "@jitsi/windows.devices.bluetooth.advertisement": "0.2.0",
     "@jitsi/windows.storage.streams": "0.2.0"
   },
+  "peerDependenciesMeta": {
+    "@jitsi/windows.devices.bluetooth.advertisement": {
+      "optional": true
+    },
+    "@jitsi/windows.storage.streams": {
+      "optional": true
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:jitsi/spot-electron-sdk.git"
