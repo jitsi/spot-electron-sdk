@@ -1,4 +1,4 @@
-declare module 'jitsi-meet-logger' {
+declare module '@jitsi/logger' {
     class Logger {
         error(message: string, ...params): void;
         info(message: string, ...params): void;
