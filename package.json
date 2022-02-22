@@ -53,5 +53,5 @@
     "lint": "eslint --ext .ts,.tsx ./src",
     "prepare": "npm run build"
   },
-  "version": "0.2.1"
+  "version": "0.2.2"
 }
