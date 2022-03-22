@@ -58,7 +58,7 @@ export default class BeaconDetector extends AbstractBeaconDetector {
 
             reader.close();
 
-            this.onDiscover(manufecturerDataString.substr(4), args.rawSignalStrengthInDBm);
+            this.onDiscover(manufecturerDataString.slice(4), args.rawSignalStrengthInDBm);
         });
 
         this.watcher.on('Stopped', this.onScanStop);

@@ -88,14 +88,14 @@ export default class Beacon {
         // < 4 bytes major version >
         // < 4 bytes minor version >
         // < 2 bytes transmit power >
-        const uuid = `${dataString.substr(0, 8)}-${dataString.substr(8, 4)}-${
-            dataString.substr(12, 4)}-${dataString.substr(16, 4)}-${dataString.substr(20, 12)}`;
-        const major = dataString.substr(32, 4);
-        const minor = dataString.substr(36, 4);
+        const uuid = `${dataString.slice(0, 8)}-${dataString.slice(8, 12)}-${
+            dataString.slice(12, 16)}-${dataString.slice(16, 20)}-${dataString.slice(20, 32)}`;
+        const major = dataString.slice(32, 36);
+        const minor = dataString.slice(36, 40);
 
         // Join code is stored with base 36 to base 16 transformation, so needs to be reverse-transformed
         const joinCode = parseInt(`${major}${minor}`, 16).toString(36);
-        const power = parseInt(dataString.substr(40, 2), 16) - 256;
+        const power = parseInt(dataString.slice(40, 42), 16) - 256;
 
         // Based on https://www.rn.inf.tu-dresden.de/dargie/papers/icwcuca.pdf
         const distance = Math.pow(10, (power - rssi) / (10 * 2));

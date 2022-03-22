@@ -45,7 +45,7 @@ export default class BeaconDetector extends AbstractBeaconDetector {
                 return;
             }
 
-            const rawData = dataString.substr(8);
+            const rawData = dataString.slice(8);
 
             this.onDiscover(rawData, peripherial.rssi);
         });
